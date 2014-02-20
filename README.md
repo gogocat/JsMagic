@@ -5,7 +5,7 @@ Bring magic into Javascript. Make things impossible to do in native Javascript b
 
 This is a experimental project for Javascript developers to share ideas.
 
-The goal is not to achieve or create anything special. It is aim to kick start passionate developer's idea and learn through deep thinking and research about very low level javaScript language in order to create 'Magic'.
+The goal is not to achieve or create anything special. It is aim to kick start passionate developer's idea and learn through deep thinking and research javaScript language in order to create 'Magic'.
 
 What 'Magic' means here
 ----
