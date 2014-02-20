@@ -33,7 +33,7 @@ console.log('total: ' + addToCart());
 ```
 
 Other interesting (hardcore) magic are:
-- Dependency injection (named parameters)in Angular JS <a href="http://www.alexrothenberg.com/2013/02/11/the-magic-behind-angularjs-dependency-injection.html" target="_blank">explain here</a>
+- Dependency injection (named parameters) in Angular JS <a href="http://www.alexrothenberg.com/2013/02/11/the-magic-behind-angularjs-dependency-injection.html" target="_blank">explain here</a>
 - Two way data binding
 - Promise
 
