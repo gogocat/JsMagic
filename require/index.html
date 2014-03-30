@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>jQuery require module loader Test</title>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="js/jqueryRequire.js"></script>
+</head>
+
+<body>
+
+	<h1>jQuery require module loader</h1>
+	
+	<p>
+		This js magic make client side module loader work like CommonJS or node js 'require' style, which load module synchronously.
+	</p>
+	<p>
+		The original idea was inspired by <a href="http://pixelsvsbytes.com/blog/2013/02/js-require-for-browsers-better-faster-stronger/" target="_blank">Torben Haase</a>
+	</p>
+	<p>
+		Module script no longer need to wrap in a closure. Just 'exports' your module.
+	</p>
+	<p>
+		I use jQuery to simplified lots of the work without using Object.defineProperty, also leverage jQuery build-in cache.
+		See, jQuery has all the power long long ago!!
+	</p>
+
+	<hr>
+	<h2>DEMO synchronous require</h2>
+	
+	<script>
+		// synchronous require sayName module
+		var myname = require('modules/sayName.js');
+		myname();
+		
+		// Asynchronous require hello module
+		var myHelloWorld = require('modules/hello.js', function(hello) {
+			hello.init("Hello!! I loaded Asynchronously");
+		});
+	</script>
+	
+</body>
+
+</html>
+
