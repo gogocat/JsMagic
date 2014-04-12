@@ -1,7 +1,7 @@
 //	cacheFn(myfn);
 //	@fn - original function to be decorate with cache
 //	@context - optional call context.default to null
-//	@ignorSpace - optional to stop remove line breaks and space in arguments object.
+//	@ignorSpace - boolean, an optional parameter to stop remove line breaks and space in arguments.
 function cacheFn(fn, context, ignorSpace){
 	return (function(fn, context, ignorSpace){
 		var cache = [];
@@ -47,7 +47,7 @@ function myFn(num) {
 }
 
 // make myFn to be cache function
-var mySuperFn = cacheFn(myFn,  false);
+var mySuperFn = cacheFn(myFn);
 
 // make call with dummy 2nd parameter
 mySuperFn(10000000, function(){
