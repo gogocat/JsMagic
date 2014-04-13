@@ -2,61 +2,51 @@
 //	@fn - original function to be decorate with cache
 //	@context - optional call context.default to null
 //	@ignorSpace - boolean, an optional parameter to stop remove line breaks and space in arguments.
-function cacheFn(fn, context, ignorSpace){
-	return (function(fn, context, ignorSpace){
-		var cache = [];
-		context = context || null;
-		
+function cacheFn(fn, ctx, ignorSpace){
+	return (function(fn, ctx, ignorSpace){
+		var cache = [],
+			context,
+			shouldIgnorSpace = true,
+			maxCacheLength = 1000;
+
+		context = (typeof arguments[1] === "boolean") ? null : ctx || null;
+		if (arguments[2] === undefined) {
+			if (typeof arguments[1] === "boolean") {
+				shouldIgnorSpace = arguments[1];
+			}
+		}
+
 		return function() {
-			var args = (Array.prototype.slice.call(arguments)).toString(),
+			var args =  Array.prototype.slice.call(arguments),
+				argString = args.toString(),
+				addCache = function() {
+					var ret;
+					if (cacheLength >= maxCacheLength) {
+						cache.shift();
+					}
+					cache.push({
+						key: argString,
+						result: (fn.apply(context, args))
+					});
+					return cache[cache.length - 1].result;
+				},
 				cacheLength = cache.length,
 				c;
-			if (ignorSpace !== false) {
-				args = args.replace(/\s+|\r?\n|\r/g,"");
+			if (shouldIgnorSpace !== false) {
+				argString = argString.replace(/\s+|\r?\n|\r/g,"");
 			}
 			if (cacheLength) {
 				console.time("cacheFn"); // debug time
 				for (c=0; c < cacheLength; c+=1) {
-					if (cache[c].args === args) {
-						console.log("using cache: ", cache[c].result);
+					if (cache[c].key === argString) {
 						console.timeEnd("cacheFn"); // debug timeEnd
 						return cache[c].result;
 					}
-					console.log("no cache: ", args); // debug timeEnd
 				}
+				return addCache();
 			} else {
-				cache.push({
-					args: args,
-					result: (fn.apply(context, arguments))
-				});
+				return addCache();
 			}
 		}
-	}(fn, context, ignorSpace));
+	}(fn, ctx, ignorSpace));
 };
-
-// test expensive function
-function myFn(num) {
-	var result = 0, 
-		count = num || 10000;
-	console.time("myFn");
-	while(count -- > 0) {
-		result +=1;
-	}
-	console.timeEnd("myFn");
-	return result;
-}
-
-// make myFn to be cache function
-var mySuperFn = cacheFn(myFn);
-
-// make call with dummy 2nd parameter
-mySuperFn(10000000, function(){
-	var a = "a";
-	return a;
-});
-
-// shouldn't have cache as 2nd parameter is different
-mySuperFn(10000000, "x"); 
-
-// should use cache even 2nd parameter format as inline style
-mySuperFn(10000000, function(){ var a = "a"; return a; }); // this should use cache

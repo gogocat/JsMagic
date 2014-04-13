@@ -1,6 +1,6 @@
-function createAsyncFn(fn) {
+function createAsyncFn(fn, context) {
 	"use strict";
-	var DecoratedFn = function(fn) {
+	var DecoratedFn = function(fn, context) {
 		var originalFn = fn;
 		return function() {
 			var deferred = $.Deferred(),
@@ -9,12 +9,12 @@ function createAsyncFn(fn) {
 				return originalFn;
 			}
 			setTimeout(function() {
-				deferred.resolve(originalFn.apply(null,arg));
+				deferred.resolve(originalFn.apply(context,arg));
 			},0);
 			return deferred.promise();
 		};
 	};
-	return new DecoratedFn(fn);
+	return new DecoratedFn(fn, context || null);
 }
 
 // test
