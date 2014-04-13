@@ -1,18 +1,19 @@
 //	cacheFn(myfn);
 //	@fn - original function to be decorate with cache
 //	@context - optional call context.default to null
-//	@ignorSpace - boolean, an optional parameter to stop remove line breaks and space in arguments.
-function cacheFn(fn, ctx, ignorSpace){
-	return (function(fn, ctx, ignorSpace){
+//	@ignoreSpace - boolean, an optional parameter to stop remove line breaks and space in arguments.
+function cacheFn(fn, ctx, ignoreSpace){
+	"use strict";
+	return (function(fn, ctx, ignoreSpace){
 		var cache = [],
 			context,
-			shouldIgnorSpace = true,
+			shouldIgnoreSpace = true,
 			maxCacheLength = 1000;
 
 		context = (typeof arguments[1] === "boolean") ? null : ctx || null;
 		if (arguments[2] === undefined) {
 			if (typeof arguments[1] === "boolean") {
-				shouldIgnorSpace = arguments[1];
+				shouldIgnoreSpace = arguments[1];
 			}
 		}
 
@@ -32,7 +33,7 @@ function cacheFn(fn, ctx, ignorSpace){
 				},
 				cacheLength = cache.length,
 				c;
-			if (shouldIgnorSpace !== false) {
+			if (shouldIgnoreSpace !== false) {
 				argString = argString.replace(/\s+|\r?\n|\r/g,"");
 			}
 			if (cacheLength) {
@@ -48,5 +49,5 @@ function cacheFn(fn, ctx, ignorSpace){
 				return addCache();
 			}
 		}
-	}(fn, ctx, ignorSpace));
+	}(fn, ctx, ignoreSpace));
 };

@@ -1,3 +1,10 @@
+/*
+//	createAsyncFn - factory to decorate an non-async function to be asyn function
+//	require jQuery
+//	@fn - function to be decorated
+//	@context - context to be called on fn
+//	return new decorated function
+*/
 function createAsyncFn(fn, context) {
 	"use strict";
 	var DecoratedFn = function(fn, context) {
@@ -16,29 +23,3 @@ function createAsyncFn(fn, context) {
 	};
 	return new DecoratedFn(fn, context || null);
 }
-
-// test
-// sample count function
-function count(number) {
-	var num = number,
-		counted = 0;
-	// Start timing now
-	console.log("counting...");
-	while (counted < num) {
-		counted +=1;
-	}
-	return counted;
-}
-
-// covert count function to become Asyn function
-var asynCount = createAsyncFn(count);
-
-// set 100000 count then display number counted
-asynCount(100000).then(function(arg){
-	console.log("...then i have counted...", arg)
-});
-// this line should run first
-console.log("should run first...");
-
-// undo to get back original function
-asynCount("undo")(500);

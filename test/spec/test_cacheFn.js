@@ -17,8 +17,7 @@ function myFn(num) {
 describe("mySuperFn", function() {
 	// make myFn to be cache function
 	var mySuperFn = cacheFn(myFn);
-	var mySuperFnKeepSpace = cacheFn(myFn, false);
-	
+
 	beforeEach(function() {
 		spyOn(window, 'myFn').and.callThrough();
 	});
@@ -44,7 +43,20 @@ describe("mySuperFn", function() {
 			return a;
 		});
 		expect(window.myFn).not.toHaveBeenCalled();
-		expect(ret).toBeGreaterThan(0);
+		expect(ret).toEqual(10000000);
+	});
+	
+});
+
+describe("mySuperFnKeepSpace", function() {
+	var mySuperFnKeepSpace = cacheFn(myFn, false);
+	
+	beforeEach(function() {
+		spyOn(window, 'myFn').and.callThrough();
+	});
+	
+	it("should be an function", function() {
+		expect(typeof mySuperFnKeepSpace).toEqual("function");
 	});
 	
 	it("should return value not using cache", function() {
@@ -52,17 +64,17 @@ describe("mySuperFn", function() {
 			var a = "a";
 			return a;
 		});
-		expect(ret).toBeGreaterThan(0);
+		expect(ret).toEqual(10000000);
 	});
 	
 	it("should return value not using cache even parameters are same but code format different", function() {
 		var ret = mySuperFnKeepSpace(10000000, function(){var a = "a";return a;});
-		expect(ret).toBeGreaterThan(0);
+		expect(ret).toEqual(10000000);
 	});
 	
 	it("should return value using cache", function() {
 		var ret = mySuperFnKeepSpace(10000000, function(){var a = "a";return a;});
-		expect(ret).toBeGreaterThan(0);
+		expect(ret).toEqual(10000000);
 	});
 	
 });
