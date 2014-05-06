@@ -6,21 +6,23 @@
 */
 var require = (function(){
 	"use strict";
-	var $cache = {};
-	
+	window.$r_cache = window.$r_cache || {};
+
 	return function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
+			cache = window.$r_cache,
 			request,
 			ret;
+		
 		if(typeof uri !== "string") {
 			throw  "uri is underline";
 		}
-		if ($cache[uri]) {
+		if (cache[uri]) {
 			if (isAsync) {
-				callback($cache[uri]);
+				callback(cache[uri]);
 				return;
 			} else {
-				return $cache[uri];
+				return cache[uri];
 			}
 		}
 		request = $.ajax({
@@ -34,7 +36,7 @@ var require = (function(){
 				if (response && response.statusText === "success" || response.status === 200) {		
 					closureFn = new Function('"use strict";\nvar exports = {};\n' + response.responseText + '\n return exports;'); // for trapping the loaded script scope
 					//console.log(closureFn.toString()); // DEBUG print out closureFn
-					$cache[uri] = ret = closureFn(); // Make the closureFn
+					cache[uri] = ret = closureFn(); // Make the closureFn
 					if (isAsync) {
 						callback(ret);
 					}
