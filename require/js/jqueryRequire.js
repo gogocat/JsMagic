@@ -31,7 +31,7 @@ var require = (function(){
 			complete: function(response) {
 				var closureFn;
 				// console.log(arguments); // DEBUG response object
-				if (response && response.statusText === "success") {		
+				if (response && response.statusText === "success" || response.status === 200) {		
 					closureFn = new Function('"use strict";\nvar exports = {};\n' + response.responseText + '\n return exports;'); // for trapping the loaded script scope
 					//console.log(closureFn.toString()); // DEBUG print out closureFn
 					$cache[uri] = ret = closureFn(); // Make the closureFn
