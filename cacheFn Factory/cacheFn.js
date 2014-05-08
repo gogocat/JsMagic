@@ -9,7 +9,8 @@ function cacheFn(fn, ctx, ignoreSpace){
 			context,
 			shouldIgnoreSpace = true,
 			maxCacheLength = 1000;
-
+			
+		// manipulation parameters 
 		context = (typeof arguments[1] === "boolean") ? null : ctx || null;
 		if (arguments[2] === undefined) {
 			if (typeof arguments[1] === "boolean") {
@@ -33,6 +34,7 @@ function cacheFn(fn, ctx, ignoreSpace){
 				},
 				cacheLength = cache.length,
 				c;
+				
 			if (shouldIgnoreSpace !== false) {
 				argString = argString.replace(/\s+|\r?\n|\r/g,"");
 			}
@@ -44,10 +46,8 @@ function cacheFn(fn, ctx, ignoreSpace){
 						return cache[c].result;
 					}
 				}
-				return addCache();
-			} else {
-				return addCache();
-			}
+			} 
+			return addCache();
 		}
 	}(fn, ctx, ignoreSpace));
 };
