@@ -14,6 +14,10 @@ function myFn(num) {
 	return result;
 }
 
+function myFnTwo(num, str, obj) {
+	
+}
+
 describe("mySuperFn", function() {
 	// make myFn to be cache function
 	var mySuperFn = cacheFn(myFn);
@@ -76,5 +80,21 @@ describe("mySuperFnKeepSpace", function() {
 		var ret = mySuperFnKeepSpace(10000000, function(){var a = "a";return a;});
 		expect(ret).toEqual(10000000);
 	});
+	
+});
+
+
+describe("mySuperFnTwo", function() {
+	var mySuperFnTwo = cacheFn(myFnTwo);
+	
+	beforeEach(function() {
+		spyOn(window, 'myFnTwo').and.callThrough();
+	});
+	
+	it("should be an function", function() {
+		expect(typeof mySuperFnTwo).toEqual("function");
+	});
+	
+
 	
 });
