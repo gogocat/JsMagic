@@ -11,12 +11,9 @@
 <body>
 
 	<h1>jQuery require module loader</h1>
-	
+
 	<p>
-		This js magic make client side module loader work like CommonJS or node js 'require' style, which load module synchronously.
-	</p>
-	<p>
-		The original idea was inspired by <a href="http://pixelsvsbytes.com/blog/2013/02/js-require-for-browsers-better-faster-stronger/" target="_blank">Torben Haase</a>
+		This js magic make client side module loader work like CommonJS or node js 'require' style, which load module synchronously or Asynchronously.
 	</p>
 	<p>
 		Module script no longer need to wrap in a closure. Just 'exports' your module.
@@ -27,15 +24,20 @@
 	</p>
 
 	<hr>
+	
 	<h2>DEMO synchronous require</h2>
-	
-	<a href="page2.html">Next page</a>
-	
 	<script>
 		// synchronous require sayName module
 		var myname = require('modules/sayName.js');
 		myname();
-		
+	</script>
+	<p>
+		<a href="page2.html">Next page to check browser cache loaded scripts</a>
+	</p>
+	<p>
+		<a href="../test/specRunner_require.html">Run Unit Test</a>
+	</p>
+	<script>
 		// Asynchronous require hello module
 		var myHelloWorld = require('modules/hello.js', function(hello) {
 			hello.init("Hello!! I loaded Asynchronously");
