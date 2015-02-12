@@ -2,7 +2,7 @@
 //	require script loader
 //	require jQuery
 //	@uri - script location
-//	@callback - callback function for Asynchronous load
+//	@callback - callback function for Asynchronous load script
 */
 var require = (function(){
 	"use strict";
@@ -12,36 +12,47 @@ var require = (function(){
 		var isAsync = (typeof callback === "function") ? true : false,
 			cache = window.$r_cache,
 			request,
+			wrapScript,
 			ret;
 		
-		if(typeof uri !== "string") {
-			throw  "uri is underline";
+		if (typeof uri !== "string") {
+			throw  "script url is undefined";
 		}
+		
 		if (cache[uri]) {
 			if (isAsync) {
-				callback(cache[uri]);
-				return;
-			} else {
-				return cache[uri];
+				return callback(cache[uri]);
 			}
+			return cache[uri];
 		}
+		
+		wrapScript = function(responseText) {
+			var closureFn,
+				source;
+			if (responseText) {		
+				closureFn = new Function('"use strict";\n var exports = {};\n' + responseText + '\n return exports; \n //# sourceURL='+ uri +'');
+				cache[uri] = source = closureFn(); // Make the closureFn
+				return source;
+			} else {
+				return null;
+			}
+		};
+
 		request = $.ajax({
 			url: uri,
 			type: 'GET',
-			dataType: 'text',
+			dataType: "script",
 			async: isAsync,
-			complete: function(response) {
-				var closureFn;
-				// console.log(arguments); // DEBUG response object
-				if (response && response.statusText === "success" || response.status === 200) {		
-					closureFn = new Function('"use strict";\nvar exports = {};\n' + response.responseText + '\n return exports;'); // for trapping the loaded script scope
-					//console.log(closureFn.toString()); // DEBUG print out closureFn
-					cache[uri] = ret = closureFn(); // Make the closureFn
-					if (isAsync) {
-						callback(ret);
-					}
+			cache:true,
+			dataFilter: wrapScript,
+			success: function(closureFn) {
+				if(!typeof closureFn === "function") {
+					return;
+				}
+				if (isAsync) {
+					callback(closureFn);
 				} else {
-					throw response.statusText;
+					ret = closureFn;
 				}
 			}
 		});
