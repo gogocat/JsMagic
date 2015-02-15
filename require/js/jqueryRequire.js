@@ -28,9 +28,14 @@ var require = (function(){
 		
 		wrapScript = function(responseText) {
 			var closureFn,
+				closureFnText,
 				source;
-			if (responseText) {		
-				closureFn = new Function('"use strict";\n var exports = {};\n' + responseText + '\n return exports; \n //# sourceURL='+ uri +'');
+			if (responseText) {	
+				closureFnText = '"use strict";\n var module = {}, exports = {}; \n';
+				closureFnText += responseText;
+				closureFnText += '\n module.exports = exports; \n module.id = "'+ uri +'"';
+				closureFnText += '\n return module.exports; \n //# sourceURL='+ uri;
+				closureFn = new Function(closureFnText);
 				cache[uri] = source = closureFn(); // Make the closureFn
 				return source;
 			} else {

@@ -2,7 +2,7 @@
 // require jqueryRequire.js
 */
 
-alert("This test must be run under web server. Script is referencing as 'http://localhost/JsMagic/require/modules/hello.js'");
+console.log("This test must be run under web server. Script is referencing as 'http://localhost/JsMagic/require/modules/hello.js'");
 
 var host = 'http://' + window.location.host,
 	sayNameFn,
