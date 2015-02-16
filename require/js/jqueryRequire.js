@@ -6,7 +6,7 @@
 */
 var require = (function(){
 	"use strict";
-	window.$r_cache = window.$r_cache || {};
+	var $r_cache = {};
 
 	return function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
