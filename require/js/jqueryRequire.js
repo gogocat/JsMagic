@@ -33,7 +33,7 @@ var require = (function(){
 			if (responseText) {	
 				closureFnText = '"use strict";\n var module = {}, exports = {}; \n';
 				closureFnText += responseText;
-				closureFnText += '\n module.exports = exports; \n module.id = "'+ uri +'"';
+				closureFnText += '\n if(!module.exports) module.exports = exports; \n module.id = "'+ uri +'";';
 				closureFnText += '\n return module.exports; \n //# sourceURL='+ uri;
 				closureFn = new Function(closureFnText);
 				cache[uri] = source = closureFn(); // Make the closureFn
