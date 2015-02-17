@@ -10,7 +10,7 @@ var require = (function(){
 
 	return function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
-			cache = window.$r_cache,
+			cache = $r_cache,
 			request,
 			wrapScript,
 			ret;

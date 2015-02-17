@@ -5,10 +5,8 @@
 console.log("This test must be run under web server. Script is referencing as 'http://localhost/JsMagic/require/modules/hello.js'");
 
 var host = 'http://' + window.location.host,
-	sayNameFn,
-	excuted;
-
-
+	path = host + '/JsMagic/require/modules/';
+	
 describe("jqueryRequire test", function() {
 
 	it("should be a function", function() {
@@ -16,14 +14,19 @@ describe("jqueryRequire test", function() {
 	});
 	
 	it("should load script synchronously", function() {
-		var myModule = require(host + '/JsMagic/require/modules/hello.js');
+		var myModule = require(path + 'hello.js');
 		expect(typeof myModule).toBe("object");
 		expect(typeof myModule.init).toBe("function");
 	});
 	
+});
+
+describe("Test asynchronous loading", function() {
+	var sayNameFn,
+		excuted;
 	// Asynchronous test
 	beforeEach(function(done) {
-		var helloModule = require(host + '/JsMagic/require/modules/sayName.js', function(sayName) {
+		var helloModule = require(path + 'sayName.js', function(sayName) {
 			excuted = true;
 			sayNameFn = sayName;
 			done();
@@ -36,10 +39,23 @@ describe("jqueryRequire test", function() {
 		done();
 	});
 	
-	it("should has cached modules in winodw.$r_cache", function() {
-		expect(typeof window.$r_cache).toBe("object");
-		expect(window.$r_cache.hasOwnProperty(host + '/JsMagic/require/modules/hello.js')).toBe(true);
-		expect(window.$r_cache.hasOwnProperty(host + '/JsMagic/require/modules/sayName.js')).toBe(true);
+	it("should not has $r_cache cached in winodw", function() {
+		expect(window.$r_cache).toBeUndefined();
+	});
+});
+
+/*
+describe("Test asynchronous loading list of modules", function() {
+	var moduleA,
+		moduleB;
+	// Asynchronous test
+	beforeEach(function(done) {
+		var finalModule = require([path + 'moduleA.js', path + 'moduleB.js'], function(a, b) {
+			moduleA = a;
+			moduleB = b;
+			done();
+		});
 	});
 
 });
+*/
