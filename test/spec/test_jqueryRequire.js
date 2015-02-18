@@ -46,10 +46,13 @@ describe("Test asynchronous loading", function() {
 
 
 		
-/* // doesn't work as expect when loading cross domain script
+// doesn't work as expect when loading cross domain script
 describe("Test asynchronous loading cross domain script", function() {
 	var excuted,
 		moduleA;
+	var s = $('<script type="text" src="http://bizcreative.com.au/js/moduleA.js" async></script>');
+	$("head").append(s);
+	/*
 	// Asynchronous test
 	beforeEach(function(done) {
 		var externalModule = require('http://bizcreative.com.au/js/moduleA.js', function(moduleA) {
@@ -75,9 +78,9 @@ describe("Test asynchronous loading cross domain script", function() {
 		expect(moduleName).toMatch("This is Module A");
 		done();
 	});
-
+	*/
 });
-*/
+
 
 /*
 describe("Test asynchronous loading list of modules", function() {
