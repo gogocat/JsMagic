@@ -45,43 +45,6 @@ describe("Test asynchronous loading", function() {
 });
 
 
-		
-// doesn't work as expect when loading cross domain script
-describe("Test asynchronous loading cross domain script", function() {
-	var excuted,
-		moduleA;
-	var s = $('<script type="text" src="http://bizcreative.com.au/js/moduleA.js" async></script>');
-	$("head").append(s);
-	/*
-	// Asynchronous test
-	beforeEach(function(done) {
-		var externalModule = require('http://bizcreative.com.au/js/moduleA.js', function(moduleA) {
-			excuted = true;
-			moduleA = moduleA;
-			done();
-		});
-	});
-	
-	it("should load script moduleA Asynchronously", function(done) {
-		expect(excuted).toBe(true);
-		expect(typeof moduleA).toBe("object");
-		done();
-	});
-	
-	it("moduleA.getModuleName should be a function", function() {
-		expect(typeof moduleA.getModuleName).toBe("function");
-		done();
-	});
-	
-	it("call moduleA.getModuleName should return 'This is Module A'", function() {
-		var moduleName = moduleA.getModuleName();
-		expect(moduleName).toMatch("This is Module A");
-		done();
-	});
-	*/
-});
-
-
 /*
 describe("Test asynchronous loading list of modules", function() {
 	var moduleA,
