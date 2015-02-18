@@ -26,10 +26,11 @@ var require = (function(){
 			return cache[uri];
 		}
 		
-		wrapScript = function(responseText) {
+		wrapScript = function(responseText, dataType) {
 			var closureFn,
 				closureFnText,
 				source;
+			console.log("dataType: ", dataType);
 			if (responseText) {	
 				closureFnText = '"use strict";\n var module = {}, exports = {}; \n';
 				closureFnText += responseText;
@@ -59,6 +60,9 @@ var require = (function(){
 				} else {
 					ret = closureFn;
 				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				throw errorThrown;
 			}
 		});
 		return (isAsync) ? request : ret;
