@@ -4,13 +4,19 @@
 //	@uri - script location
 //	@callback - callback function for Asynchronous load script
 */
-var require = (function(){
+(function(env) {
 	"use strict";
-	var $r_cache = {};
-
-	return function (uri, callback) {
+	var isNode = (env !== window && typeof module !== "undefined" && module.exports),
+		supportAmd = (typeof env.define === "function" && env.define.amd),
+		require,
+		cache = {};
+		
+	if (isNode) {
+		return;
+	}
+		
+	require = function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
-			cache = $r_cache,
 			request,
 			wrapScript,
 			ret;
@@ -30,7 +36,7 @@ var require = (function(){
 			var closureFn,
 				closureFnText,
 				source;
-			console.log("dataType: ", dataType);
+			//console.log("dataType: ", dataType);
 			if (responseText) {	
 				closureFnText = '"use strict";\n var module = {}, exports = {}; \n';
 				closureFnText += responseText;
@@ -39,9 +45,8 @@ var require = (function(){
 				closureFn = new Function(closureFnText);
 				cache[uri] = source = closureFn(); // Make the closureFn
 				return source;
-			} else {
-				return null;
-			}
+			} 
+			return null;
 		};
 
 		request = $.ajax({
@@ -53,7 +58,7 @@ var require = (function(){
 			crossDomain: false,
 			dataFilter: wrapScript,
 			success: function(closureFn) {
-				if(!typeof closureFn === "function") {
+				if(!closureFn) {
 					return;
 				}
 				if (isAsync) {
@@ -66,6 +71,10 @@ var require = (function(){
 				throw errorThrown;
 			}
 		});
+		
 		return (isAsync) ? request : ret;
 	};
-}());
+	
+	env.require = require;
+
+}(this));
