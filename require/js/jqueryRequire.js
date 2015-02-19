@@ -50,6 +50,7 @@ var require = (function(){
 			dataType: "script",
 			async: isAsync,
 			cache:true,
+			crossDomain: false,
 			dataFilter: wrapScript,
 			success: function(closureFn) {
 				if(!typeof closureFn === "function") {
