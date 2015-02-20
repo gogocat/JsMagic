@@ -1,6 +1,7 @@
 /*
 //	require script loader
 //	require jQuery
+//	if environment is Node js it will do nothing.
 //	@uri - script location
 //	@callback - callback function for Asynchronous load script
 */
