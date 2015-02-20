@@ -55,7 +55,7 @@
 			} 
 			return null;
 		};
-
+		/*
 		request = $.ajax({
 			url: uri,
 			type: 'GET',
@@ -76,8 +76,33 @@
 			},
 			error: onFail
 		});
+		*/
 		
-		$.when(request, request).done(callback).fail();
+		fetch =function(url) {
+			return $.ajax({
+				url: uri,
+				type: 'GET',
+				dataType: "script",
+				async: isAsync,
+				cache:true,
+				crossDomain: false,
+				dataFilter: wrapScript
+			});
+		};
+		
+		request = function(url) {
+			var dfd = $.Deferred();
+			if (cache[uri]) {
+				dfd.resolve(cache[uri]);
+			} else {
+				fetch(url).done(function(closureFn){
+					dfd.resolve(closureFn);
+				}).fail(onFail);
+			}
+			return dfd.promise();
+		};
+		
+		$.when(request, request).done(callback).fail(onFail);
 		
 		return (isAsync) ? request : ret;
 	};
