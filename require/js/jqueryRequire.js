@@ -37,7 +37,9 @@
 			var closureFn,
 				closureFnText,
 				source;
-			//console.log("dataType: ", dataType);
+				
+			//TODO: consider support AMD.
+			// static analysis to wrap script as AMD module.
 			if (responseText) {	
 				closureFnText = '"use strict";\n var module = {}, exports = {}; \n';
 				closureFnText += responseText;
