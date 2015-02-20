@@ -5,7 +5,7 @@
 //	@uri - script location
 //	@callback - callback function for Asynchronous load script
 */
-(function(env) {
+(function($, env) {
 	"use strict";
 	var isNode = (env !== window && typeof module !== "undefined" && module.exports),
 		supportAmd = (typeof env.define === "function" && env.define.amd),
@@ -80,4 +80,4 @@
 	
 	env.require = require;
 
-}(this));
+}(jQuery, this));
