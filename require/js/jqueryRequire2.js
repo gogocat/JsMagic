@@ -20,6 +20,7 @@
 	require = function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
 			dependenceList = [],
+			deferreds = [],
 			request,
 			wrapScript,
 			ret;
@@ -29,14 +30,14 @@
 		} else if ($.isArray(uri)) {
 			dependenceList = uri;
 		}
-		
+		/*
 		if (cache[uri]) {
 			if (isAsync) {
 				return callback(cache[uri]);
 			}
 			return cache[uri];
 		}
-		
+		*/
 		wrapScript = function(responseText, dataType) {
 			var closureFn,
 				closureFnText,
@@ -102,9 +103,15 @@
 			return dfd.promise();
 		};
 		
-		$.when(request, request).done(callback).fail(onFail);
+		$.each(dependenceList, function(index, value){
+			deferreds.push(
+				request(value);
+			);
+		});
 		
-		return (isAsync) ? request : ret;
+		$.when.apply($, deferreds).done(callback).fail(onFail);
+		
+		//return (isAsync) ? request : ret;
 	};
 	
 	onFail = function() {
