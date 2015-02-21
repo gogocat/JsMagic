@@ -21,6 +21,7 @@
 		var isAsync = (typeof callback === "function") ? true : false,
 			dependenceList = [],
 			deferreds = [],
+			fetch,
 			request,
 			wrapScript,
 			ret;
@@ -30,14 +31,7 @@
 		} else if ($.isArray(uri)) {
 			dependenceList = uri;
 		}
-		/*
-		if (cache[uri]) {
-			if (isAsync) {
-				return callback(cache[uri]);
-			}
-			return cache[uri];
-		}
-		*/
+
 		wrapScript = function(responseText, dataType) {
 			var closureFn,
 				closureFnText,
@@ -56,29 +50,7 @@
 			} 
 			return null;
 		};
-		/*
-		request = $.ajax({
-			url: uri,
-			type: 'GET',
-			dataType: "script",
-			async: isAsync,
-			cache:true,
-			crossDomain: false,
-			dataFilter: wrapScript,
-			success: function(closureFn) {
-				if(!closureFn) {
-					return;
-				}
-				if (isAsync) {
-					callback(closureFn);
-				} else {
-					ret = closureFn;
-				}
-			},
-			error: onFail
-		});
-		*/
-		
+
 		fetch =function(url) {
 			return $.ajax({
 				url: uri,
@@ -116,7 +88,7 @@
 	
 	onFail = function() {
 		console.log("fail: ", arguments);
-	}
+	};
 	
 	env.require = require;
 
