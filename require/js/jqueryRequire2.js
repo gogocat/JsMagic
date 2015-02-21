@@ -16,7 +16,8 @@
 	if (isNode) {
 		return;
 	}
-		
+	
+	// TODO: consider to make require an Object and return new instance
 	require = function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
 			dependenceList = [],
