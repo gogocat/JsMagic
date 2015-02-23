@@ -27,6 +27,9 @@
 			ret;
 		
 		if ($.isArray(uri)) {
+			if (!isAsync) {
+				throw "Callback function is undefined";
+			}
 			dependenceList = uri;
 		}
 
@@ -49,7 +52,7 @@
 			return null;
 		};
 
-		fetch =function(url) {
+		fetch =function(uri) {
 			var ajaxOptions = {
 				url: uri,
 				type: 'GET',
@@ -71,12 +74,12 @@
 			return $.ajax(ajaxOptions);
 		};
 		
-		request = function(url) {
+		request = function(uri) {
 			var dfd = $.Deferred();
 			if (cache[uri]) {
 				dfd.resolve(cache[uri]);
 			} else {
-				fetch(url).done(function(closureFn){
+				fetch(uri).done(function(closureFn){
 					dfd.resolve(closureFn);
 				}).fail(onFail);
 			}
@@ -89,13 +92,14 @@
 					request(value);
 				);
 			});
-		
 			// TODO: move this to another function
 			$.when.apply($, deferreds).done(callback).fail(onFail);
 		} else {
-			fetch
+			if (cache[uri]) {
+				ret = cache[uri];
+			}
+			fetch(uri);
 		}
-		
 		return (isAsync) ? request : ret;
 	};
 	
