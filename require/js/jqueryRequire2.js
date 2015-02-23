@@ -17,7 +17,6 @@
 		return;
 	}
 	
-	// TODO: consider to make require an Object and return new instance
 	require = function (uri, callback) {
 		var isAsync = (typeof callback === "function") ? true : false,
 			dependenceList = [],
@@ -53,7 +52,7 @@
 		};
 
 		fetch =function(url) {
-			return $.ajax({
+			var ajaxOptions = {
 				url: uri,
 				type: 'GET',
 				dataType: "script",
@@ -61,7 +60,17 @@
 				cache:true,
 				crossDomain: false,
 				dataFilter: wrapScript
-			});
+			},
+			onSuccess = function(closureFn) {
+				if(!closureFn) {
+					return;
+				}
+				ret = closureFn;
+			};
+			if (!isAsync) {
+				ajaxOptions.success = onSuccess;
+			}
+			return $.ajax(ajaxOptions);
 		};
 		
 		request = function(url) {
