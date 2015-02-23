@@ -18,7 +18,7 @@
 	}
 	
 	require = function (uri, callback) {
-		var isAsync = (typeof callback === "function") ? true : false,
+		var isAsync = (typeof callback === "function"),
 			dependenceList = [],
 			deferreds = [],
 			fetch,
@@ -26,9 +26,7 @@
 			wrapScript,
 			ret;
 		
-		if (typeof uri === "string") {
-			dependenceList.push(uri);
-		} else if ($.isArray(uri)) {
+		if ($.isArray(uri)) {
 			dependenceList = uri;
 		}
 
@@ -85,16 +83,20 @@
 			return dfd.promise();
 		};
 		
-		$.each(dependenceList, function(index, value){
-			deferreds.push(
-				request(value);
-			);
-		});
+		if (isAsync) {
+			$.each(dependenceList, function(index, value){
+				deferreds.push(
+					request(value);
+				);
+			});
 		
-		// TODO: move this to another function
-		$.when.apply($, deferreds).done(callback).fail(onFail);
+			// TODO: move this to another function
+			$.when.apply($, deferreds).done(callback).fail(onFail);
+		} else {
+			fetch
+		}
 		
-		//return (isAsync) ? request : ret;
+		return (isAsync) ? request : ret;
 	};
 	
 	onFail = function() {
