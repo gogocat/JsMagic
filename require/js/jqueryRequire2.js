@@ -26,9 +26,11 @@
 			wrapScript,
 			ret;
 		
-		if ($.isArray(uri)) {
+		if (typeof uri === "string") {
+			dependenceList.push(uri);
+		} else if ($.isArray(uri)) {
 			if (!isAsync) {
-				throw "Callback function is undefined";
+				throw "Asynchronous callback function is undefined";
 			}
 			dependenceList = uri;
 		}
@@ -86,7 +88,12 @@
 			return dfd.promise();
 		};
 		
-		if (isAsync) {
+		if (!isAsync) {
+			if (cache[dependenceList[0]]) {
+				return = cache[dependenceList[0]];
+			}
+			fetch(dependenceList[0]);
+		} else {
 			$.each(dependenceList, function(index, value){
 				deferreds.push(
 					request(value);
@@ -94,11 +101,6 @@
 			});
 			// TODO: move this to another function
 			$.when.apply($, deferreds).done(callback).fail(onFail);
-		} else {
-			if (cache[uri]) {
-				ret = cache[uri];
-			}
-			fetch(uri);
 		}
 		return (isAsync) ? request : ret;
 	};
