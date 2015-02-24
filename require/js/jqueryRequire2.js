@@ -99,7 +99,7 @@
 					request(value);
 				);
 			});
-			// TODO: move this to another function
+
 			$.when.apply($, deferreds).done(callback).fail(onFail);
 		}
 		return (isAsync) ? request : ret;
