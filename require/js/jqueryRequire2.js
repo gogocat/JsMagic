@@ -9,7 +9,9 @@
 	"use strict";
 	var isNode = (env !== window && typeof module !== "undefined" && module.exports),
 		supportAmd = (typeof env.define === "function" && env.define.amd),
-		onFail,
+		onFail = function() {
+			console.log("fail: ", arguments);
+		},
 		require,
 		cache = {};
 		
@@ -40,8 +42,6 @@
 				closureFnText,
 				source;
 				
-			//TODO: consider support AMD.
-			// static analysis to wrap script as AMD module.
 			if (responseText) {	
 				closureFnText = '"use strict";\n var module = {}, exports = {}; \n';
 				closureFnText += responseText;
@@ -72,6 +72,7 @@
 			};
 			if (!isAsync) {
 				ajaxOptions.success = onSuccess;
+				ajaxOptions.fail = onFail;
 			}
 			return $.ajax(ajaxOptions);
 		};
@@ -90,25 +91,19 @@
 		
 		if (!isAsync) {
 			if (cache[dependenceList[0]]) {
-				return = cache[dependenceList[0]];
+				return cache[dependenceList[0]];
 			}
 			fetch(dependenceList[0]);
 		} else {
 			$.each(dependenceList, function(index, value){
-				deferreds.push(
-					request(value);
-				);
+				deferreds.push(request(value));
 			});
-
 			$.when.apply($, deferreds).done(callback).fail(onFail);
 		}
+		
 		return (isAsync) ? request : ret;
 	};
-	
-	onFail = function() {
-		console.log("fail: ", arguments);
-	};
-	
+
 	env.require = require;
 
 }(jQuery, this));
